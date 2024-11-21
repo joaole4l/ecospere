@@ -1,0 +1,545 @@
+<!DOCTYPE HTML>
+<html lang="pt-BR">
+<head>
+    <title>Feed de Postagens - ECOSPERE</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* Estilo do corpo da página */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background: url("{{ url_for('static', filename='images/paisagem.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+        }
+        .background-blur {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            filter: blur(10px);
+            z-index: -1;
+        }
+        form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza os elementos horizontalmente */
+}
+
+.form-buttons {
+    display: flex;
+    gap: 10px; /* Espaçamento entre os botões */
+    justify-content: center; /* Centraliza os botões */
+    margin-top: 10px; /* Espaçamento acima da seção dos botões */
+}
+
+form input[type="file"] {
+    position: relative;
+    width: auto; /* Permite que o botão mantenha seu tamanho natural */
+    color: transparent; /* Esconde o texto, mantendo o botão funcional */
+}
+
+form input[type="file"]::file-selector-button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form input[type="file"]::file-selector-button:hover {
+    background-color: #218838;
+}
+
+
+form button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+
+        .container {
+            display: flex;
+            flex: 1;
+            width: 100%;
+            height: calc(100% - 40px);
+        }
+        .sidebar {
+            width: 250px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .sidebar img.logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .sidebar img.menu-image {
+            width: 250px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .sidebar h2 {
+            margin-top: 0;
+            text-align: center;
+        }
+        .sidebar a.button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .sidebar a.button:hover {
+            background-color: #218838;
+        }
+        .search-container {
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .search-container input[type="text"] {
+            width: calc(100% - 40px);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-right: 10px;
+        }
+        .search-container i {
+            font-size: 18px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .search-container i:hover {
+            color: #0056b3;
+        }
+        form textarea {
+    width: 100%; /* Garante que ocupe todo o espaço disponível */
+    max-width: 600px; /* Mesma largura máxima que os posts */
+    margin: 0 auto; /* Centraliza horizontalmente */
+    display: block; /* Garante que o elemento se comporte como bloco */
+    padding: 10px; /* Espaçamento interno */
+    border: 1px solid #ddd; /* Bordas consistentes */
+    border-radius: 5px; /* Bordas arredondadas */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Sombra leve para destaque */
+    resize: vertical; /* Permite redimensionar apenas na vertical */
+}
+
+        .main-content {
+            flex: 1;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    max-width: 800px; /* Limita a largura máxima */
+    margin-left: auto;
+    margin-right: auto;
+        }
+        .post {
+            margin-bottom: 20px;
+    padding: 10px; /* Reduz o espaço interno */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    max-width: 600px; /* Define uma largura máxima para a postagem */
+    margin-left: auto; /* Centraliza horizontalmente */
+    margin-right: auto; /* Centraliza horizontalmente */
+        }
+        .post img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .comment-section {
+            margin-top: 10px;
+        }
+        .comment {
+            border: 1px solid #ddd;
+            padding: 5px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .submit-comment {
+            background-color: #007bff;
+            color: white;
+        }
+        .submit-comment:disabled {
+            background-color: #6c757d;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .delete-post {
+            background-color: #dc3545;
+            color: white;
+        }
+        .history-section {
+            margin-top: 30px;
+        }
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        .footer {
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-top: 1px solid #ddd;
+            text-align: center;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+        }
+        .footer p {
+            margin: 0;
+            color: #333;
+        }
+        .logout-button {
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .logout-button:hover {
+            background-color: #c82333;
+        }
+        .post-actions {
+    display: flex;
+    gap: 10px; /* Espaçamento entre os botões */
+    margin-top: 10px;
+}
+
+.post-actions button {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: background-color 0.2s;
+}
+
+.post-actions button:hover {
+    background-color: #e2e6ea;
+}
+
+.post-actions button i {
+    margin-right: 5px; /* Espaço entre o ícone e o texto */
+}
+
+
+        /* Estilo do Chatbot */
+        #chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        #chatbot-header {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        #chatbot-body {
+            display: none;
+            padding: 10px;
+        }
+        #chatbot-messages {
+            height: 200px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+        #chatbot-input {
+            width: calc(100% - 60px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #chatbot-send {
+            width: 50px;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #chatbot-send:hover {
+            background: #0056b3;
+        }
+
+    </style>
+    
+</head>
+<body>
+    <div class="background-blur"></div>
+    <div class="container">
+        <div class="sidebar">
+            <img src="{{ url_for('static', filename='images/logo letra preta.png') }}" alt="Imagem do Menu" class="menu-image" />
+            <h2>Menu</h2>
+            <a href="{{ url_for('perfil_usuario') }}" class="button">Meu usuário</a>
+            <a href="{{ url_for('postagem') }}" class="button">Últimas Publicações</a>
+            <a href="{{ url_for('sobremim') }}" class="button">Quem Somos?</a>
+            <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+        </div>
+
+        <div class="main-content">
+            <h2>Bem-vindo {% if user %}{{ user.username }}{% else %}Visitante{% endif %}</h2>
+
+            <!-- Mensagens de feedback -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul>
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Formulário de nova postagem -->
+            <form method="POST" action="{{ url_for('nova_postagem') }}" enctype="multipart/form-data">
+                <textarea name="post-content" placeholder="Escreva sua postagem aqui..." required></textarea>
+                
+                <!-- Contêiner dos botões -->
+                <div class="form-buttons">
+                    <input type="file" name="post-image">
+                    <button type="submit">Postar</button>
+                </div>
+            </form>
+            
+            
+<br>
+            <h2>Histórico de Postagens</h2>
+<br>
+<div id="posts-section">
+    {% if posts %}
+        {% for post in posts %}
+            <div class="post">
+                <h3>{{ post.content }}</h3>
+                {% if post.image_path %}
+                    <img src="{{ url_for('static', filename='uploads/' + post.image_path.split('/')[-1]) }}" alt="Imagem do Post" style="max-width: 300px;">
+                {% endif %}
+                <p><small>{{ post.timestamp }}</small></p>
+
+                <!-- Botões de interação -->
+                <div class="post-actions">
+                    <button class="like-button"><i class="fas fa-thumbs-up"></i> Curtir</button>
+                    <button class="comment-button"><i class="fas fa-comment"></i> Comentar</button>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Nenhuma postagem ainda.</p>
+    {% endif %}
+</div>
+
+
+            <div class="history-section">
+                
+                <div id="history-section">
+                    
+                    <!-- Histórico de postagens será inserido aqui -->
+                    {% if posts %}
+                        {% for post in posts %}
+                            <div class="history-item">
+                                <h4>{{ post.content }}</h4>
+                                <p><small>{{ post.timestamp }}</small></p>
+                                {% if post.image_path %}
+                                    <img src="{{ url_for('static', filename='uploads/' + post.image_path.split('/')[-1]) }}" alt="Imagem do Post" class="history-image">
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 ECOSPERE. Todos os direitos reservados.</p>
+    </footer>
+
+     <!-- Chatbot -->
+     <div id="chatbot-container">
+        <div id="chatbot-header">Chatbot</div>
+        <div id="chatbot-body">
+            <div id="chatbot-messages"></div>
+            <input id="chatbot-input" type="text" placeholder="Digite sua mensagem...">
+            <button id="chatbot-send">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        // Alternar exibição do chatbot
+        document.getElementById('chatbot-header').onclick = function() {
+            const body = document.getElementById('chatbot-body');
+            body.style.display = body.style.display === 'none' ? 'block' : 'none';
+        };
+
+        const chatbotContainer = document.getElementById('chatbot-container');
+const chatbotHeader = document.getElementById('chatbot-header');
+const chatbotBody = document.getElementById('chatbot-body');
+const chatbotMessages = document.getElementById('chatbot-messages');
+const chatbotInput = document.getElementById('chatbot-input');
+const chatbotSend = document.getElementById('chatbot-send');
+
+// Banco de dados de perguntas e respostas
+const faq = {
+    "como faço uma postagem?": "Para fazer uma postagem, preencha o campo de texto e, se desejar, anexe uma imagem. Clique em 'Postar' para enviar.",
+    "como posso alterar meu perfil?": "Para alterar seu perfil, vá até 'Meu Usuário' no menu lateral e edite suas informações.",
+    "quem somos?": "Somos o ECOSPERE, uma plataforma voltada para o compartilhamento de conteúdos sobre meio ambiente.",
+    "como sair da minha conta?": "Para sair da sua conta, clique no botão 'Logout' no menu lateral.",
+};
+
+// Alternar exibição do chatbot
+chatbotHeader.onclick = () => {
+    chatbotBody.style.display = chatbotBody.style.display === 'none' ? 'block' : 'none';
+};
+
+// Adicionar mensagem no chatbot
+const addMessage = (text, sender) => {
+    const message = document.createElement('div');
+    message.style.margin = '5px 0';
+    message.style.padding = '10px';
+    message.style.borderRadius = '5px';
+    message.style.background = sender === 'user' ? '#007bff' : '#ddd';
+    message.style.color = sender === 'user' ? 'white' : 'black';
+    message.style.textAlign = sender === 'user' ? 'right' : 'left';
+    message.textContent = text;
+    chatbotMessages.appendChild(message);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight; // Rolagem automática
+};
+
+// Responder mensagem do usuário
+const handleUserMessage = (message) => {
+    // Procurar resposta no FAQ
+    const response = faq[message.toLowerCase()] || 
+        "Desculpe, não entendi sua pergunta. Por favor, reformule ou entre em contato com o suporte.";
+    addMessage(response, 'bot');
+};
+
+// Enviar mensagem
+chatbotSend.onclick = () => {
+    const userMessage = chatbotInput.value.trim();
+    if (userMessage) {
+        addMessage(userMessage, 'user'); // Mostrar mensagem do usuário
+        handleUserMessage(userMessage); // Responder mensagem
+        chatbotInput.value = ''; // Limpar campo de texto
+    }
+};
+
+// Permitir enviar com Enter
+chatbotInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        chatbotSend.click();
+    }
+});
+
+    </script>
+</body>
+</html>
+
+    <script>
+        // Função para salvar postagens no localStorage
+        function savePosts(posts) {
+            localStorage.setItem('posts', JSON.stringify(posts));
+        }
+
+        // Função para carregar postagens do localStorage
+        function loadPosts() {
+            const posts = JSON.parse(localStorage.getItem('posts')) || [];
+            const postsSection = document.getElementById('posts-section');
+            postsSection.innerHTML = '';
+            posts.forEach(post => {
+                const postDiv = document.createElement('div');
+                postDiv.className = 'post';
+                postDiv.innerHTML = `
+                    <h3>${post.content}</h3>
+                    ${post.image ? `<img src="${post.image}" alt="Imagem do Post" style="max-width: 300px;">` : ''}
+                    <p><small>${post.timestamp}</small></p>
+                `;
+                postsSection.appendChild(postDiv);
+            });
+        }
+
+        // Carregar postagens ao carregar a página
+        window.onload = function () {
+            loadPosts();
+        };
+
+        // Adicionar nova postagem ao localStorage
+        document.querySelector('form').onsubmit = function (event) {
+            event.preventDefault();
+            const content = event.target.querySelector('[name="post-content"]').value;
+            const image = event.target.querySelector('[name="post-image"]').files[0];
+            const posts = JSON.parse(localStorage.getItem('posts')) || [];
+            const timestamp = new Date().toLocaleString();
+            const newPost = {
+                content,
+                timestamp,
+                image: image ? URL.createObjectURL(image) : null
+            };
+            posts.push(newPost);
+            savePosts(posts);
+            loadPosts();
+            event.target.reset();
+        };
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Recuperar Conta - ECOSPERE</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <style>
+        /* Define a imagem de fundo */
+        body {
+            background-image: url('images/paisagem.jpg'); /* Altere para o caminho da sua imagem */
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Adiciona o efeito de blur ao fundo */
+        #login-box {
+            backdrop-filter: blur(10px); /* Aplica blur ao fundo */
+            background: rgba(255, 255, 255, 0.7); /* Fundo semitransparente para o conteúdo */
+            padding: 40px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: 100px auto; /* Centraliza o conteúdo */
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Ajustes do texto e centralização */
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            text-align: left;
+        }
+
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        p {
+            color: #555;
+        }
+
+        /* Link para login ou cadastro */
+        .link {
+            display: block;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        .link a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Estilo para a logo */
+        .logo {
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            max-width: 150px; /* Ajuste o tamanho da logo conforme necessário */
+        }
+
+        /* Estilo para o reCAPTCHA */
+        .g-recaptcha {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Recuperar Conta Form -->
+    <div id="login-box">
+        <!-- Logo -->
+        <div class="logo">
+            <img src="images/logo letra verde-03.png" alt="Logo ECOSPERE" />
+        </div>
+        
+        <h2>Recuperar Conta</h2>
+        <form action="recuperar_conta.php" method="post">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Digite seu email para recuperar a conta" required />
+
+           
+
+            <input type="submit" value="Enviar Link de Recuperação" />
+
+            <p class="link">Lembrou a senha? <a href="login.html">Entrar</a></p>
+            <p class="link">Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+</html>

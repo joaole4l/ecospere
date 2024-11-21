@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Mim - ECOSPERE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <style>
+        /* Define a imagem de fundo */
+        body {
+            background-image: url('images/paisagem.jpg'); /* Altere para o caminho da sua imagem */
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Adiciona o efeito de blur ao fundo */
+        #content {
+            backdrop-filter: blur(10px); /* Aplica blur ao fundo */
+            background: rgba(255, 255, 255, 0.7); /* Fundo semitransparente para o conteúdo */
+            padding: 40px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 100px auto; /* Centraliza o conteúdo */
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Ajustes do texto e centralização */
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        p {
+            color: #555;
+            text-align: center;
+        }
+
+        /* Estilo do link para voltar ao feed */
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Welcome Content -->
+    <div id="content">
+        <div class="inner">
+            <header>
+                <h2>Bem-vindo ao ECOSPERE</h2>
+                <p>Conectando Pessoas e Ideias para um Futuro Sustentável</p>
+            </header>
+            <a href="#" class="image featured">
+				<img src="{{ url_for('static', filename='images/logo letra verde-03.png') }}" alt="Logo ECOSPERE" />
+			</a>
+			
+            <p>
+                <strong>ECOSPERE</strong> é uma plataforma criada para conectar indivíduos, comunidades e organizações em prol de um objetivo comum: proteger o meio ambiente. 
+                Aqui, você faz parte de uma comunidade ativa que quer mudar o mundo, um passo de cada vez. Seja relatando pontos de acúmulo de lixo, compartilhando ideias 
+                criativas de reaproveitamento de materiais, ou participando de eventos locais com foco ambiental, o ECOSPERE é o espaço onde sua voz se torna ação.
+            </p>
+
+            <!-- Seção Sobre Mim -->
+            <h1>Sobre Mim</h1>
+            <p>Esta é a página sobre mim. Aqui você pode adicionar informações sobre você.</p>
+            
+            <!-- Link para voltar ao feed -->
+            <a href="{{ url_for('feed') }}" class="back-link">Voltar ao Feed</a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+</html>
